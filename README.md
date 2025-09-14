@@ -61,8 +61,9 @@ Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 venv\Scripts\activate
 ```
 
-    ```bash
+    ```
     python app.py
+    
     ```
 
 3.  **Espera la carga del modelo (solo la primera vez):**
