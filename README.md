@@ -61,10 +61,10 @@ Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 venv\Scripts\activate
 ```
 
-    ```
+   
     python app.py
     
-    ```
+   
 
 3.  **Espera la carga del modelo (solo la primera vez):**
     La primera vez que ejecutes el servidor, el programa comenzará a descargar el modelo de Stable Diffusion.
