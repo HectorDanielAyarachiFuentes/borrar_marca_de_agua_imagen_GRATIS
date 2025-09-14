@@ -86,6 +86,21 @@ Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 -   **Rendimiento:** El algoritmo de **Stable Diffusion es extremadamente lento** en un CPU normal (puede tardar más de 5-10 minutos por imagen). Funciona mucho más rápido si tienes una tarjeta gráfica NVIDIA (GPU).
 -   **Consumo de Memoria:** Los modelos de IA consumen una cantidad significativa de memoria RAM.
 
+## Galería de Ejemplos Visuales
 
+Aquí puedes ver el flujo de trabajo y los resultados en imágenes.
 
-    -   [Hugging Face Diffusers](https://huggingface.co/docs/diffusers/index): Para implementar el inpainting con Stable Diffusion.
+1.  **Paso 1: Selección del área a borrar**
+    Se pinta sobre la marca de agua que se desea eliminar.
+    ![Área seleccionada para borrar](img_md/seleccionado.jpeg)
+
+2.  **Paso 2: Procesamiento**
+    La aplicación muestra una pantalla de carga mientras reconstruye la imagen.
+    ![Pantalla de carga](img_md/procesandocambio.jpeg)
+
+3.  **Paso 3: Resultado Final**
+    La imagen final sin la marca de agua.
+    ![Resultado final del proceso](img_md/resultadofinal.jpeg)
+
+4.  **Otro Ejemplo de Resultado**
+    ![Otro resultado](img_md/resultado2.jpeg)
