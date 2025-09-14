@@ -56,17 +56,22 @@ Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 
 1.  **Inicia el servidor:**
     Una vez que las dependencias estén instaladas, ejecuta el siguiente comando en la terminal:
+
+ ```bash
+venv\Scripts\activate
+```
+
     ```bash
     python app.py
     ```
 
-2.  **Espera la carga del modelo (solo la primera vez):**
+3.  **Espera la carga del modelo (solo la primera vez):**
     La primera vez que ejecutes el servidor, el programa comenzará a descargar el modelo de Stable Diffusion.
     -   **Esto puede tardar varios minutos** y descargará varios Gigabytes.
     -   Verás mensajes de progreso en la terminal. ¡Ten paciencia!
     -   Este modelo se guarda en una carpeta de caché central de tu PC (`C:\Users\TuUsuario\.cache\huggingface`), por lo que **no se volverá a descargar** en futuras ejecuciones.
 
-3.  **Accede a la aplicación:**
+4.  **Accede a la aplicación:**
     Una vez que veas el mensaje `Running on http://127.0.0.1:5000/`, abre tu navegador web y ve a esa dirección:
     http://127.0.0.1:5000/
 
