@@ -1,0 +1,9 @@
+Flask
+opencv-python
+numpy
+scikit-image
+torch
+diffusers
+transformers
+accelerate
+Pillow

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrado de Marca de Agua - Paso 2</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        #canvas-container {
+            position: relative;
+            display: inline-block; /* Crucial para posicionar canvas correctamente */
+            border: 2px solid #ccc;
+            line-height: 0; /* Elimina espacio extra bajo la imagen/canvas */
+        }
+        #image-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+        }
+        #display-image {
+            max-width: 80vw;
+            max-height: 70vh;
+            display: block; /* Elimina espacio extra bajo la imagen */
+        }
+        .controls { margin-top: 20px; }
+        .brush-controls {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .algorithm-selector {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .algorithm-selector label {
+            margin: 0 15px;
+            cursor: pointer;
+        }
+        button { font-size: 1.1em; padding: 10px 15px; margin: 0 10px; }
+
+        /* --- Estilos para la pantalla de carga --- */
+        #loader-overlay {
+            position: fixed; /* Cubre toda la pantalla */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            flex-direction: column;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Borrar Marca de Agua</h1>
+    <p>Paso 2: Pinta sobre la marca de agua y haz clic en "Procesar".</p>
+
+    <div id="canvas-container">
+        <img id="display-image" src="{{ url_for('static', filename='uploads/' ~ filename) }}" alt="Tu imagen">
+        <canvas id="image-canvas"></canvas>
+    </div>
+
+    <div id="loader-overlay">
+        <div class="spinner"></div>
+        <p>Procesando imagen... Esto puede tardar varios minutos.</p>
+    </div>
+
+    <div class="brush-controls">
+        <label for="brushSize">Tamaño del Pincel:</label>
+        <input type="range" id="brushSize" min="5" max="100" value="20">
+        <span id="brushSizeValue">20</span>px
+    </div>
+
+    <div class="controls">
+        <form id="process-form" action="{{ url_for('process_image') }}" method="post">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <input type="hidden" id="maskData" name="maskData">
+
+            <div class="algorithm-selector">
+                <h4>Elige el Algoritmo de Borrado:</h4>
+                <label title="El método más rápido, bueno para marcas de agua simples.">
+                    <input type="radio" name="algorithm" value="opencv" checked>
+                    OpenCV (Rápido)
+                </label>
+                <label title="Un método de mayor calidad que OpenCV, bueno para texturas.">
+                    <input type="radio" name="algorithm" value="scikit-image">
+                    Scikit-image (Calidad Media)
+                </label>
+                {% if stablediffusion_available %}
+                <label title="Usa Inteligencia Artificial para reconstruir la imagen. Muy lento pero de la más alta calidad. Requiere buena PC.">
+                    <input type="radio" name="algorithm" value="stablediffusion">
+                    Stable Diffusion (IA - Lento)
+                </label>
+                {% endif %}
+            </div>
+
+            <button type="button" onclick="resetSelection()">Reiniciar Selección</button>
+            <button type="submit">Procesar Imagen</button>
+        </form>
+    </div>
+
+    <script>
+        const image = document.getElementById('display-image');
+        const canvas = document.getElementById('image-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const form = document.getElementById('process-form');
+        const maskDataInput = document.getElementById('maskData');
+        const brushSizeSlider = document.getElementById('brushSize');
+        const brushSizeValue = document.getElementById('brushSizeValue');
+
+        let isDrawing = false;
+        
+        // Configuración del pincel
+        ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)'; // Amarillo semitransparente
+        ctx.lineWidth = brushSizeSlider.value;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        brushSizeValue.textContent = brushSizeSlider.value;
+
+        image.onload = () => {
+            canvas.width = image.clientWidth;
+            canvas.height = image.clientHeight;
+            // Re-aplicar configuración del pincel, ya que el contexto se reinicia al cambiar el tamaño del canvas
+            ctx.strokeStyle = 'rgba(255, 255, 0, 0.5)';
+            ctx.lineWidth = brushSizeSlider.value;
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+        };
+        if (image.complete) { image.onload(); }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            if (!isDrawing) return;
+            isDrawing = false;
+            ctx.closePath();
+        });
+
+        brushSizeSlider.addEventListener('input', (e) => {
+            ctx.lineWidth = e.target.value;
+            brushSizeValue.textContent = e.target.value;
+        });
+
+        function resetSelection() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        form.addEventListener('submit', (e) => {
+            // Comprobar si el canvas está vacío
+            const pixelBuffer = new Uint32Array(
+                ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+            );
+            const isCanvasEmpty = !pixelBuffer.some(color => color !== 0);
+
+            if (isCanvasEmpty) {
+                e.preventDefault();
+                alert('Por favor, pinta sobre la marca de agua antes de procesar.');
+            } else {
+                // Guardar el dibujo como una imagen PNG en formato Base64 antes de enviar
+                maskDataInput.value = canvas.toDataURL('image/png');
+                // Mostrar el overlay de carga
+                document.getElementById('loader-overlay').style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

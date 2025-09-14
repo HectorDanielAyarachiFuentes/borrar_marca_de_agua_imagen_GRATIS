@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Borrado de Marca de Agua - Paso 1</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    .flash { padding: 10px; margin: 10px auto; max-width: 600px; border: 1px solid transparent; border-radius: 4px; color: #a94442; background-color: #f2dede; border-color: #ebccd1; }
+    button { font-size: 1.1em; padding: 10px 15px; }
+    input[type="file"] { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Borrar Marca de Agua</h1>
+  <p>Paso 1: Sube tu imagen.</p>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*" required>
+    <br>
+    <button type="submit">Subir Imagen</button>
+  </form>
+
+</body>
+</html>

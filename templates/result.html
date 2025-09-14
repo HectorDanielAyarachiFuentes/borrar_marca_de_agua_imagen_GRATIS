@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Borrado de Marca de Agua - Resultado</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    .images { display: flex; justify-content: center; align-items: flex-start; gap: 40px; margin-top: 20px; flex-wrap: wrap; }
+    .images div { display: flex; flex-direction: column; align-items: center; }
+    .images img { max-width: 45vw; max-height: 70vh; border: 2px solid #ddd; border-radius: 10px; }
+    .controls { margin-top: 30px; }
+    a.button {
+        font-size: 1.1em;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Resultado del Procesamiento</h1>
+
+  {% if original and result %}
+  <div class="images">
+    <div>
+      <h3>Original</h3>
+      <img src="{{ url_for('static', filename='uploads/' ~ original) }}" alt="Imagen Original">
+    </div>
+    <div>
+      <h3>Procesada</h3>
+      <img src="{{ url_for('static', filename='results/' ~ result) }}" alt="Imagen Procesada">
+    </div>
+  </div>
+  {% else %}
+    <p>No se encontraron imágenes para mostrar.</p>
+  {% endif %}
+
+  <div class="controls">
+    <a href="{{ url_for('index') }}" class="button">Procesar otra imagen</a>
+  </div>
+
+</body>
+</html>
