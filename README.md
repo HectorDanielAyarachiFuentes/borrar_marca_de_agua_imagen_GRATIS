@@ -28,53 +28,79 @@ Esta es una aplicación web construida con Flask que permite a los usuarios subi
     -   JavaScript (para la interactividad del canvas)
 
 ## Instalación
-
 Sigue estos pasos para configurar el entorno de desarrollo en tu máquina local.
 
 1.  **Prepara el proyecto:**
-    Asegúrate de tener todos los archivos (`app.py`, la carpeta `templates`, etc.) en una misma carpeta (por ejemplo, `Nueva carpeta`).
-
-2.  **Crea el archivo de dependencias (`requirements.txt`):**
-    Dentro de la carpeta de tu proyecto, crea un nuevo archivo llamado `requirements.txt` y pega el contenido que se especifica en la sección anterior. Este archivo le dice a Python qué bibliotecas necesita tu proyecto.
+    Asegúrate de tener todos los archivos (`app.py`, la carpeta `templates`, etc.) en una misma carpeta.
 
 3.  **Abre una terminal:**
-    Abre PowerShell o el Símbolo del sistema en Windows.
-
-4.  **Navega a la carpeta del proyecto:**
-    Usa el comando `cd`. Si tu ruta tiene espacios, no olvides las comillas.
+    Abre PowerShell o el Símbolo del sistema en Windows y navega a la carpeta del proyecto. Si tu ruta tiene espacios, no olvides las comillas.
     ```bash
-    cd "C:\Users\Ramoncito\Downloads\Nueva carpeta"
+    cd "C:\Ruta\A\Tu\Proyecto"
     ```
 
-5.  **Instala las dependencias desde el archivo:**
-    Ejecuta el siguiente comando. `pip` leerá el archivo `requirements.txt` e instalará todas las bibliotecas listadas de una sola vez. Este paso puede tardar un poco.
+4.  **Crea y activa un entorno virtual:**
+    Es una buena práctica para aislar las dependencias. Ejecuta los siguientes comandos:
+    ```bash
+    # Crear el entorno
+    python -m venv venv
+    # Activar el entorno (en Windows)
+    .\venv\Scripts\activate
+    ```
+    Una vez activado, verás `(venv)` al principio de la línea de comandos.
+
+5.  **Crea el archivo `requirements.txt`:**
+    Dentro de la carpeta de tu proyecto, crea un archivo `requirements.txt` y pega el siguiente contenido. Este archivo le dice a Python qué bibliotecas necesita tu proyecto.
+    ```
+    flask
+    opencv-python
+    numpy
+    Pillow
+    scikit-image
+    torch
+    diffusers
+    transformers
+    accelerate
+    ```
+
+6.  **Instala las dependencias:**
+    Con el entorno virtual activado, ejecuta el siguiente comando. `pip` leerá el archivo `requirements.txt` e instalará todas las bibliotecas. Este paso puede tardar bastante tiempo.
     ```bash
     pip install -r requirements.txt
     ```
 
-## Ejecución
+## Ejecución (Guía Visual)
 
-1.  **Inicia el servidor:**
-    Una vez que las dependencias estén instaladas, ejecuta el siguiente comando en la terminal:
+Sigue estos pasos visuales para correr la aplicación después de la instalación.
 
- ```bash
-venv\Scripts\activate
-```
+1.  **Abre una terminal en la carpeta del proyecto.**
+    Puedes hacer clic derecho en la carpeta y seleccionar una opción como "Abrir en Terminal" o "Abrir ventana de PowerShell aquí".
 
-   
+    ![Abrir terminal en la carpeta del proyecto](https://github.com/HectorDanielAyarachiFuentes/borrar_marca_de_agua_imagen_GRATIS/blob/main/img_md/inicio-1.jpeg?raw=true)
+
+2.  **Activa el entorno virtual.**
+    En la terminal que acabas de abrir, ejecuta el comando para activar el entorno que creaste durante la instalación.
+    ```bash
+    .\venv\Scripts\activate
+    ```
+    ![Activar el entorno virtual](https://github.com/HectorDanielAyarachiFuentes/borrar_marca_de_agua_imagen_GRATIS/blob/main/img_md/inicio-2.jpeg?raw=true)
+
+3.  **Ejecuta la aplicación.**
+    Con el entorno activado (verás `(venv)`), inicia el servidor de Flask.
+    ```bash
     python app.py
-    
-   
+    ```
+    ![Ejecutar el script de la aplicación](https://github.com/HectorDanielAyarachiFuentes/borrar_marca_de_agua_imagen_GRATIS/blob/main/img_md/inicio-3-corriendoaplicacion.jpeg?raw=true)
 
-3.  **Espera la carga del modelo (solo la primera vez):**
+4.  **Espera la carga del modelo (solo la primera vez):**
     La primera vez que ejecutes el servidor, el programa comenzará a descargar el modelo de Stable Diffusion.
     -   **Esto puede tardar varios minutos** y descargará varios Gigabytes.
     -   Verás mensajes de progreso en la terminal. ¡Ten paciencia!
     -   Este modelo se guarda en una carpeta de caché central de tu PC (`C:\Users\TuUsuario\.cache\huggingface`), por lo que **no se volverá a descargar** en futuras ejecuciones.
 
-4.  **Accede a la aplicación:**
-    Una vez que veas el mensaje `Running on http://127.0.0.1:5000/`, abre tu navegador web y ve a esa dirección:
-    http://127.0.0.1:5000/
+5.  **Accede a la aplicación:**
+    Una vez que veas el mensaje `* Running on http://127.0.0.1:5000`, abre tu navegador web y ve a esa dirección:
+    http://127.0.0.1:5000
 
 ## Cómo Usar la Aplicación
 
